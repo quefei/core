@@ -23,6 +23,8 @@
 
 ```php
   Quefei\AliyunMns\Providers\AliyunMnsServiceProvider::class,
+  Quefei\AliyunDm\Providers\AliyunDmServiceProvider::class,
+  Quefei\Myauth\Providers\MyauthServiceProvider::class,
 ```
 
 
@@ -30,6 +32,7 @@
 
 ```php
   'MNS' => Quefei\AliyunMns\Facades\MNS::class,
+  'DM' => Quefei\AliyunDm\Facades\DM::class,
 ```
 
 
@@ -39,6 +42,15 @@
 
 ```php
   php artisan vendor:publish
+```
+
+
+
+### 4. 生成 Myauth 所需文件：
+
+
+```php
+  php artisan make:myauth --force
 ```
 
 
