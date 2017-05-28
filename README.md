@@ -43,7 +43,12 @@
 
 
 
-### 4. 环境配置：
+
+## （二）配置
+
+
+
+### 1. 环境配置：
 
 
 在 `.env` 文件中加入以下，它们的值从阿里云的 `控制台` 获取：
@@ -69,11 +74,6 @@
   ALIYUN_MNS_ENDPOINT=http://1234567890123456.mns.cn-shenzhen.aliyuncs.com
   ALIYUN_MNS_TOPIC_NAME=sms.topic-cn-shenzhen
 ```
-
-
-
-
-## （二）配置
 
 
 
