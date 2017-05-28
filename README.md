@@ -84,6 +84,9 @@
   ALIYUN_ACCESS_KEY_SECRET=
   ALIYUN_MNS_ENDPOINT=
   ALIYUN_MNS_TOPIC_NAME=
+  ALIYUN_SEND_ADDRESS=
+  ALIYUN_SENDER=
+  ALIYUN_MAIL_TAG=
   
   
   
@@ -91,11 +94,18 @@
    * 列如（假设的值）
    * 
    */
-   
-  ALIYUN_ACCESS_KEY_ID=L6d644013c2414ab
-  ALIYUN_ACCESS_KEY_SECRET=Tb2ed79818ac6498f72c45bf0b17d0
-  ALIYUN_MNS_ENDPOINT=http://1234567890123456.mns.cn-shenzhen.aliyuncs.com
-  ALIYUN_MNS_TOPIC_NAME=sms.topic-cn-shenzhen
+  // 短信服务与邮件推送
+  ALIYUN_ACCESS_KEY_ID=L6d644013c2414ab                                        // Access Key ID
+  ALIYUN_ACCESS_KEY_SECRET=Tb2ed79818ac6498f72c45bf0b17d0                      // Access Key Secret
+  
+  // 短信服务
+  ALIYUN_MNS_ENDPOINT=http://1234567890123456.mns.cn-shenzhen.aliyuncs.com     // Mns Endpoint
+  ALIYUN_MNS_TOPIC_NAME=sms.topic-cn-shenzhen                                  // 主题名称
+  
+  // 邮件推送
+  ALIYUN_SEND_ADDRESS=service@mail.dongfang.com                                // 发信地址
+  ALIYUN_SENDER=东方公司                                                       // 发件人（用户自定义）
+  ALIYUN_MAIL_TAG=service                                                      // 邮件标签
 ```
 
 
