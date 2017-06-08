@@ -25,6 +25,11 @@
   Quefei\AliyunMns\Providers\AliyunMnsServiceProvider::class,
   Quefei\AliyunDm\Providers\AliyunDmServiceProvider::class,
   Quefei\Myauth\Providers\MyauthServiceProvider::class,
+  Quefei\Myentrust\Providers\MyentrustServiceProvider::class,
+  Quefei\Core\Providers\CoreServiceProvider::class,
+  Zizaco\Entrust\EntrustServiceProvider::class,
+  Collective\Html\HtmlServiceProvider::class,
+  TomLingham\Searchy\SearchyServiceProvider::class,
 ```
 
 
@@ -33,6 +38,10 @@
 ```php
   'MNS' => Quefei\AliyunMns\Facades\MNS::class,
   'DM' => Quefei\AliyunDm\Facades\DM::class,
+  'Entrust' => Zizaco\Entrust\EntrustFacade::class,
+  'Form' => Collective\Html\FormFacade::class,
+  'Html' => Collective\Html\HtmlFacade::class,
+  'Searchy' => TomLingham\Searchy\Facades\Searchy::class,
 ```
 
 
@@ -46,7 +55,40 @@
 
 
 
-### 4. 生成 Myauth 所需文件：
+### 4. 配置 Auth：
+
+
+在 `config/auth.php` 文件的 `providers` 数组中加入：
+
+```php
+  'providers' => [
+      'users' => [
+          'driver' => 'eloquent',
+          'model' => App\User::class,
+          'table' => 'users',            // 加入该行
+      ],
+```
+
+
+
+### 5. 注册中间件：
+
+
+在 `app/Http/Kernel.php` 文件的 `protected $routeMiddleware` 数组中加入：
+
+```php
+  'myadmin' => \Quefei\Myentrust\Middleware\Myadmin::class,
+  'myrole' => \Quefei\Myentrust\Middleware\Myrole::class,
+  'mypermission' => \Quefei\Myentrust\Middleware\Mypermission::class,
+  'myuser' => \Quefei\Myentrust\Middleware\Myuser::class,
+  'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
+  'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
+  'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
+```
+
+
+
+### 6. 生成 Myauth 所需文件：
 
 
 ```php
@@ -55,11 +97,33 @@
 
 
 
-### 5. 运行迁移：
+### 7. 生成 Myentrust 所需文件：
+
+
+```php
+  php artisan entrust:migration
+  
+  php artisan make:seeder EntrustTableSeeder
+
+  php artisan make:myentrust --force
+```
+
+
+
+### 8. 运行迁移：
 
 
 ```php
   php artisan migrate
+```
+
+
+
+### 9. 打印自动加载索引：
+
+
+```php
+  composer dump-autoload
 ```
 
 
@@ -111,80 +175,92 @@
 
 
 
-
-## （三）使用
-
+### 2. 配置 Entrust：
 
 
-### 1. 短信服务：
-
-
-手机号码、短信签名、短信模板是 `字符串`，模板参数是数组的 `键值对`：
+在 `config/entrust.php` 文件的 `return` 数组中修改：
 
 ```php
-  /**
-   * 导入
-   *
-   */
-   
-  use Quefei\AliyunMns\Facades\MNS;
-  
-  
-  
-  /**
-   * 使用
-   *
-   */
-   
-  // 一个模板参数时
-  MNS::send("手机号码", "短信签名", "短信模板", ["模板参数的键" => "模板参数的值"]);
-  
-  // 多个模板参数时
-  MNS::send("手机号码", "短信签名", "短信模板", ["键" => "值", "键" => "值", "键" => "值"]);
-  
-  // 没有模板参数时
-  MNS::send("手机号码", "短信签名", "短信模板");
-  
-  
-  
-  /**
-   * 例如
-   *
-   */
-  
-  MNS::send("13688889999", "东方公司", "SMS_12345678", ["customer" => "东方用户"]);
+  'role' => 'Quefei\Myentrust\Models\Role',
+  'permission' => 'Quefei\Myentrust\Models\Permission',
 ```
 
 
 
-### 2. 邮件推送：
+### 3. 配置 Searchy：
 
 
-收件人、主题、正文是 `字符串`：
+在 `config/searchy.php` 文件的 `return` 数组中修改：
 
 ```php
-  /**
-   * 导入
-   *
-   */
-   
-  use Quefei\AliyunDm\Facades\DM;
+  'default' => 'ufuzzy',
+```
+
+
+
+### 4. 清理缓存：
+
+
+```php
+  php artisan config:clear
+```
+
+
+
+### 5. 初始化用户、角色、权限：
+
+
+初始用户 `admin`，初始密码 `123456`：
+
+```php
+  php artisan db:seed --class=EntrustTableSeeder
+```
+
+
+
+
+## （三）错误
+
+
+
+### 1. 错误一：
+
+
+在安装时，如果出现以下错误：
+
+```php
+  Your requirements could not be resolved to an installable set of packages.
+
+    Problem 1
+      - Installation request for quefei/myentrust ^0.7.2 -> satisfiable by quefei/myentrust[v0.7.2].
+      - quefei/myentrust v0.7.2 requires zizaco/entrust 5.2.* -> satisfiable by zizaco/entrust[5.2.x-dev] but 
+	these conflict with your requirements or minimum-stability.
+
+
+  Installation failed, reverting ./composer.json to its original content.
+```
+
+
+需要在 `composer.json` 文件中加入：
+
+```php
+  // 推荐在第二行加入
+  "minimum-stability": "dev",
+```
+
+
+
+### 2. 错误二：
+
+
+在 `删除角色` 时，如果出现错误无法删除，需要在 `vendor/zizaco/entrust/src/Entrust/Traits/EntrustRoleTrait.php` 文件中修改第 51 行：
+
+```php
+  // 第 51 行其中的
+  Config::get('auth.model'),
   
   
-  
-  /**
-   * 使用
-   *
-   */
-   
-  DM::send("收件人", "主题", "正文");
-  
-  
-  
-  /**
-   * 例如
-   */
-  
-  DM::send("123456789@qq.com", "斗地主", "欢迎参加斗地主大赛");
+  // 修改为
+  Config::get('auth.providers.users.model'),
 ```
 

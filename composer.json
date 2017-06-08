@@ -12,12 +12,15 @@
     "require": {
         "php": ">=7.0.7",
         "illuminate/support": "5.4.*",
-		"quefei/myauth": "~0.3",
-        "quefei/myentrust": "~0.1"
+		"quefei/myauth": "~1.1",
+        "quefei/myentrust": "~1.1"
     },
     "autoload": {
         "psr-4": {
             "Quefei\\Core\\": "src/"
-        }
+        },
+		"files": [
+			"src/Helpers/CoreHelper.php"
+		]
     }
 }
