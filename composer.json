@@ -18,9 +18,6 @@
     "autoload": {
         "psr-4": {
             "Quefei\\Core\\": "src/"
-        },
-		"files": [
-			"src/Helpers/CoreHelper.php"
-		]
+        }
     }
 }
