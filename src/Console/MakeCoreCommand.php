@@ -51,15 +51,27 @@ class MakeCoreCommand extends Command
 	// 替换文件内容
 	public function replaceString($option, $files, $buffer)
 	{
+		$mycount = 0;
+		
 		foreach ($files as $file)
 		{
 			$myOption = $this->option($option);
 			$myFile = base_path($file);
 			$myBuffer = __DIR__ . '/buffer/' . $buffer;
 			
-			file_put_contents($myFile, str_replace(file_get_contents($myBuffer), $myOption, file_get_contents($myFile)));
+			file_put_contents($myFile, str_replace(file_get_contents($myBuffer), $myOption, file_get_contents($myFile), $count));
+			
+			$mycount = $mycount + $count;
 		}
 		
 		file_put_contents($myBuffer, $myOption);
+		
+		if ($option == 'title')
+		{
+			echo $option . ': ' . $mycount . ($mycount == 9 ? '    Success' : '    Error, The default is 9') . "\n";
+		} else
+		{
+			echo $option . ': ' . $mycount . ($mycount == 1 ? '    Success' : '    Error, The default is 1') . "\n";
+		}
 	}
 }
