@@ -22,6 +22,9 @@ class MakeCoreCommand extends Command
 		'vendor/quefei/myauth/src/Console/stubs/make/views/auth/register.stub',
 		'vendor/quefei/myauth/src/Console/stubs/make/views/auth/emailRegister.stub',
 		'vendor/quefei/myauth/src/Console/stubs/make/views/auth/login.stub',
+		'vendor/quefei/myauth/src/Console/stubs/make/views/auth/activate/activate.stub',
+		'vendor/quefei/myauth/src/Console/stubs/make/views/auth/activate/activateFail.stub',
+		'vendor/quefei/myauth/src/Console/stubs/make/views/auth/activate/activateSuccess.stub',
 		'vendor/quefei/myentrust/src/Views/role/index.blade.php',
 		'vendor/quefei/myentrust/src/Views/user/index.blade.php',
 		'vendor/quefei/myentrust/src/Views/searchUser/index.blade.php',
@@ -68,7 +71,7 @@ class MakeCoreCommand extends Command
 		
 		if ($option == 'title')
 		{
-			echo $option . ': ' . $mycount . ($mycount == 9 ? '    Success' : '    Error, The default is 9') . "\n";
+			echo $option . ': ' . $mycount . ($mycount == 12 ? '    Success' : '    Error, The default is 12') . "\n";
 		} else
 		{
 			echo $option . ': ' . $mycount . ($mycount == 1 ? '    Success' : '    Error, The default is 1') . "\n";

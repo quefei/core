@@ -3,6 +3,20 @@
 
 
 
+### 说明：
+
+
+在使用 Myauth 之前，你需要安装以下依赖：
+
+1. [Redis](http://www.redis.cn)
+
+2. [Laravel Mix](http://d.laravel-china.org/docs/5.4/mix)
+
+3. [Laravel-lang](https://github.com/caouecs/Laravel-lang)
+
+
+
+
 ## （一）安装
 
 
@@ -137,6 +151,15 @@
 
 
 
+### 11. 编译资源文件：
+
+
+```php
+  npm run dev
+```
+
+
+
 
 ## （二）配置
 
@@ -157,6 +180,11 @@
   ALIYUN_ACCESS_KEY_SECRET=
   ALIYUN_MNS_ENDPOINT=
   ALIYUN_MNS_TOPIC_NAME=
+  ALIYUN_MNS_SIGN_NAME=
+  ALIYUN_MNS_TEMPLATE_CODE=
+  ALIYUN_MNS_TEMPLATE_PRODUCT=
+  ALIYUN_MNS_TEMPLATE_CUSTOMER=
+  ALIYUN_MNS_TEMPLATE_ITEM=
   ALIYUN_SEND_ADDRESS=
   ALIYUN_SENDER=
   ALIYUN_MAIL_TAG=
@@ -175,6 +203,14 @@
   // 短信服务
   ALIYUN_MNS_ENDPOINT=http://1234567890123456.mns.cn-shenzhen.aliyuncs.com     // Mns Endpoint
   ALIYUN_MNS_TOPIC_NAME=sms.topic-cn-shenzhen                                  // 主题名称
+  
+  // 注意：短信模板的内容必须存在 ${code}，它是 6 位数验证码
+  // 如果短信内容的参数不存在请不要给它赋值
+  ALIYUN_MNS_SIGN_NAME=东方公司                                                // 短信签名
+  ALIYUN_MNS_TEMPLATE_CODE=SMS_67180184                                        // 短信模板的 CODE
+  ALIYUN_MNS_TEMPLATE_PRODUCT=东方公司                                         // 短信内容的 ${product}
+  ALIYUN_MNS_TEMPLATE_CUSTOMER=                                                // 短信内容的 ${customer}
+  ALIYUN_MNS_TEMPLATE_ITEM=
   
   // 邮件推送
   ALIYUN_SEND_ADDRESS=service@mail.dongfang.com                                // 发信地址
