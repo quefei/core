@@ -25,7 +25,7 @@
 
 
 ```php
-  composer require quefei/core
+  composer require quefei/core:~1.0
 ```
 
 
