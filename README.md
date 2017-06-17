@@ -29,6 +29,13 @@
 ```
 
 
+在 `Linux` 操作系统下，可以进行自动安装。在执行以下命令之前，你必须切换到 `Laravel` 的根目录：
+
+```php
+  curl -sSo quefei-core https://raw.githubusercontent.com/quefei/core/master/install && bash quefei-core
+```
+
+
 
 ### 2. 注册：
 
