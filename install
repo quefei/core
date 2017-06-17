@@ -81,7 +81,7 @@ if ([ -f $(pwd)/composer.json ] && [ -f $(pwd)/artisan ] &&
 	:
 else
 	echoRed 'Error: You have to go to the laravel root directory'
-	exit 2
+	rm $0; exit 2
 fi
 
 # 排除错误1
@@ -312,7 +312,11 @@ echoGreen "Time used: $time seconds"
 echo ""
 echoGreen "Default user: admin"
 echoGreen "User password: 123456"
+echo ""
 echoGreen "Site Title: $title"
 echoGreen "Site Logo: $logo"
 echoGreen "Site Copyright: $copyright"
+echo ""
+
+rm $0
 
