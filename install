@@ -1,43 +1,16 @@
 #!/bin/bash
-# https://github.com/quefei/core
-# 安装及配置 Quefei Core
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:~/bin:$PATH
 
+start=$(date "+%s")
 <<COMMENT
-多行注释
+  Variable
 COMMENT
-
-
-# Variable
+# Quefei Core 的版本
 version=':~1.0'
 
-aliyunmns='Quefei\\AliyunMns\\Providers\\AliyunMnsServiceProvider::class,'
-aliyundm='Quefei\\AliyunDm\\Providers\\AliyunDmServiceProvider::class,'
-myauth='Quefei\\Myauth\\Providers\\MyauthServiceProvider::class,'
-myentrust='Quefei\\Myentrust\\Providers\\MyentrustServiceProvider::class,'
-core='Quefei\\Core\\Providers\\CoreServiceProvider::class,'
-entrust='Zizaco\\Entrust\\EntrustServiceProvider::class,'
-html='Collective\\Html\\HtmlServiceProvider::class,'
-searchy='TomLingham\\Searchy\\SearchyServiceProvider::class,'
-
-MNS="'MNS'=>Quefei\\\\AliyunMns\\\\Facades\\\\MNS::class,"
-DM="'DM'=>Quefei\\\\AliyunDm\\\\Facades\\\\DM::class,"
-Entrust="'Entrust'=>Zizaco\\\\Entrust\\\\EntrustFacade::class,"
-Form="'Form'=>Collective\\\\Html\\\\FormFacade::class,"
-Html="'Html'=>Collective\\\\Html\\\\HtmlFacade::class,"
-Searchy="'Searchy'=>TomLingham\\\\Searchy\\\\Facades\\\\Searchy::class,"
-
-myadmin="'myadmin'=>\\\\Quefei\\\\Myentrust\\\\Middleware\\\\Myadmin::class,"
-myrole="'myrole'=>\\\\Quefei\\\\Myentrust\\\\Middleware\\\\Myrole::class,"
-mypermission="'mypermission'=>\\\\Quefei\\\\Myentrust\\\\Middleware\\\\Mypermission::class,"
-myuser="'myuser'=>\\\\Quefei\\\\Myentrust\\\\Middleware\\\\Myuser::class,"
-role="'role'=>\\\\Zizaco\\\\Entrust\\\\Middleware\\\\EntrustRole::class,"
-permission="'permission'=>\\\\Zizaco\\\\Entrust\\\\Middleware\\\\EntrustPermission::class,"
-ability="'ability'=>\\\\Zizaco\\\\Entrust\\\\Middleware\\\\EntrustAbility::class,"
-
-
-# Function
-
+<<COMMENT
+  Function
+COMMENT
 # echo 颜色
 colorText()
 {
@@ -89,29 +62,26 @@ readBlue()
 	read $2
 }
 
-
-# Main
-
-# 检查用户是否为 root
-if [ $(id -u) != '0' ]
-then
-	echoRed 'Error: You must be root to run this script'
+<<COMMENT
+  Main
+COMMENT
+# 检查当前用户是否为 root
+if [ $(id -u) != '0' ]; then
+	echoRed 'Error: You have to be root to run this script'
 	exit 1
 fi
 
-# 检查参数是否为 Laravel 的安装目录
-if [ $# -eq 1 ]
-then
-	if [ -f $1/composer.json ] && [ -f $1/artisan ] && [ -d $1/app ] && [ -d $1/database ] && [ -d $1/public ] && [ -d $1/resources ] && [ -d $1/config ] && [ -d $1/routes ] && [ -d $1/vendor ]
-	then
-		cd $1
-	else
-		echoRed 'Error: The parameter must be the Laravel root directory'
-		exit 2
-	fi
+# 检查当前目录是否为 Laravel 的根目录
+if ([ -f $(pwd)/composer.json ] && [ -f $(pwd)/artisan ] &&
+	[ -d $(pwd)/app ] && [ -d $(pwd)/database ] &&
+	[ -d $(pwd)/public ] && [ -d $(pwd)/resources ] &&
+	[ -d $(pwd)/config ] && [ -d $(pwd)/routes ] &&
+	[ -d $(pwd)/vendor ]); then
+	
+	:
 else
-	echoRed 'Error: There are no parameters or too many parameters'
-	exit 3
+	echoRed 'Error: You have to go to the laravel root directory'
+	exit 2
 fi
 
 # 排除错误1
@@ -122,6 +92,22 @@ grep 'CACHE_DRIVER=array' .env &> /dev/null || (sed -i "/CACHE_DRIVER/d" .env; e
 grep 'quefei/core' vendor/composer/installed.json &> /dev/null || composer require quefei/core$version || exit 21
 
 # 注册
+aliyunmns='Quefei\\AliyunMns\\Providers\\AliyunMnsServiceProvider::class,'
+aliyundm='Quefei\\AliyunDm\\Providers\\AliyunDmServiceProvider::class,'
+myauth='Quefei\\Myauth\\Providers\\MyauthServiceProvider::class,'
+myentrust='Quefei\\Myentrust\\Providers\\MyentrustServiceProvider::class,'
+core='Quefei\\Core\\Providers\\CoreServiceProvider::class,'
+entrust='Zizaco\\Entrust\\EntrustServiceProvider::class,'
+html='Collective\\Html\\HtmlServiceProvider::class,'
+searchy='TomLingham\\Searchy\\SearchyServiceProvider::class,'
+
+MNS="'MNS'=>Quefei\\\\AliyunMns\\\\Facades\\\\MNS::class,"
+DM="'DM'=>Quefei\\\\AliyunDm\\\\Facades\\\\DM::class,"
+Entrust="'Entrust'=>Zizaco\\\\Entrust\\\\EntrustFacade::class,"
+Form="'Form'=>Collective\\\\Html\\\\FormFacade::class,"
+Html="'Html'=>Collective\\\\Html\\\\HtmlFacade::class,"
+Searchy="'Searchy'=>TomLingham\\\\Searchy\\\\Facades\\\\Searchy::class,"
+
 for providers in $aliyunmns $aliyundm $myauth $myentrust $core $entrust $html $searchy
 do
 	grep $providers config/app.php &> /dev/null || sed -i "/^ *'providers'/a\        $providers" config/app.php || exit 22
@@ -140,6 +126,14 @@ php artisan vendor:publish || exit 24
 grep "'table' *=> *'users'," config/auth.php | grep -v '/' &> /dev/null || sed -i "/User::class,/a\            'table' => 'users'," config/auth.php || exit 25
 
 # 注册中间件
+myadmin="'myadmin'=>\\\\Quefei\\\\Myentrust\\\\Middleware\\\\Myadmin::class,"
+myrole="'myrole'=>\\\\Quefei\\\\Myentrust\\\\Middleware\\\\Myrole::class,"
+mypermission="'mypermission'=>\\\\Quefei\\\\Myentrust\\\\Middleware\\\\Mypermission::class,"
+myuser="'myuser'=>\\\\Quefei\\\\Myentrust\\\\Middleware\\\\Myuser::class,"
+role="'role'=>\\\\Zizaco\\\\Entrust\\\\Middleware\\\\EntrustRole::class,"
+permission="'permission'=>\\\\Zizaco\\\\Entrust\\\\Middleware\\\\EntrustPermission::class,"
+ability="'ability'=>\\\\Zizaco\\\\Entrust\\\\Middleware\\\\EntrustAbility::class,"
+
 for routeMiddleware in $myadmin $myrole $mypermission $myuser $role $permission $ability
 do
 	myRouteMiddleware=$(echo $routeMiddleware | awk -F\> '{ print $2 }')
@@ -147,16 +141,14 @@ do
 done
 
 # 生成 Core 所需文件
-#read -p "Your Title: " title
 
 a=0; b=0; c=0
 
 while ((a<10))
 do
-	readYellow "Your Title: " title
+	readYellow "Site Title: " title
 	
-	if [ "${title}" = "" ]
-	then
+	if [ "${title}" = "" ]; then
 		title=$(cat vendor/quefei/core/src/Console/buffer/title.buffer)
 		break
     fi
@@ -174,9 +166,8 @@ do
 					 'vendor/quefei/myentrust/src/Views/user/index.blade.php' \
 					 'vendor/quefei/myentrust/src/Views/searchUser/index.blade.php'
 	do
-		if (grep $title $titleFile &> /dev/null)
-		then
-			echoRed 'Error: Change your title'
+		if (grep $title $titleFile &> /dev/null); then
+			echoRed 'Error: You have to change site title'
 			((a++))
 			break 1
 		else
@@ -189,19 +180,17 @@ done
 
 while ((b<10))
 do
-	readYellow "Your Logo: " logo
+	readYellow "Site Logo: " logo
 	
-	if [ "${logo}" = "" ]
-	then
+	if [ "${logo}" = "" ]; then
 		logo=$(cat vendor/quefei/core/src/Console/buffer/logo.buffer)
 		break
     fi
 	
 	for logoFile in 'vendor/quefei/myauth/src/Console/stubs/make/views/layouts/_nav.stub'
 	do
-		if (grep $logo $logoFile &> /dev/null)
-		then
-			echoRed 'Error: Change your logo'
+		if (grep $logo $logoFile &> /dev/null); then
+			echoRed 'Error: You have to change site logo'
 			((b++))
 			break 1
 		else
@@ -214,19 +203,17 @@ done
 
 while ((c<10))
 do
-	readYellow "Your Copyright: " copyright
+	readYellow "Site Copyright: " copyright
 	
-	if [ "${copyright}" = "" ]
-	then
+	if [ "${copyright}" = "" ]; then
 		copyright=$(cat vendor/quefei/core/src/Console/buffer/copyright.buffer)
 		break
     fi
 	
 	for copyrightFile in 'vendor/quefei/myauth/src/Console/stubs/make/views/layouts/_footer.stub'
 	do
-		if (grep $copyright $copyrightFile &> /dev/null)
-		then
-			echoRed 'Error: Change your copyright'
+		if (grep $copyright $copyrightFile &> /dev/null); then
+			echoRed 'Error: You have to change site copyright'
 			((c++))
 			break 1
 		else
@@ -246,8 +233,7 @@ php artisan make:myauth --force || exit 28
 
 [ -f database/seeds/EntrustTableSeeder.php ] || php artisan make:seeder EntrustTableSeeder || exit 29
 
-if (find database/migrations -name "*entrust_setup_tables.php" | grep 'entrust_setup_tables.php' &> /dev/null)
-then
+if (find database/migrations -name "*entrust_setup_tables.php" | grep 'entrust_setup_tables.php' &> /dev/null); then
 	:
 else
 	echo 'yes' | php artisan entrust:migration || exit 30
@@ -256,18 +242,17 @@ fi
 php artisan make:myentrust --force || exit 31
 
 # 运行迁移
-if ((php artisan migrate:status | grep 'No migrations found' &> /dev/null) || (php artisan migrate:status | grep '^| *N' &> /dev/null))
-then
+if (php artisan migrate:status | grep 'No migrations found' &> /dev/null) || (php artisan migrate:status | grep '^| *N' &> /dev/null); then
 	if (grep 'DB_CONNECTION=..' .env &&
 		grep 'DB_HOST=..' .env &&
 		grep 'DB_PORT=..' .env &&
 		grep 'DB_DATABASE=..' .env &&
 		grep 'DB_USERNAME=..' .env &&
-		grep 'DB_PASSWORD=..' .env)
-	then
+		grep 'DB_PASSWORD=..' .env); then
+		
 		php artisan migrate || exit 32
 	else
-		echoRed 'Error: Check the .env file'
+		echoRed 'Error: You have to check your .env file'
 		exit 33
 	fi
 fi
@@ -276,10 +261,10 @@ fi
 composer dump-autoload || exit 34
 
 # 编译资源文件
-if (find node_modules -name '*laravel-mix*' | grep 'laravel-mix' &> /dev/null)
-then
+if (find node_modules -name '*laravel-mix*' | grep 'laravel-mix' &> /dev/null); then
 	npm run dev || exit 35
 else
+	echoRed 'Error: You have to install laravel-mix'
 	exit 36
 fi
 
@@ -319,9 +304,15 @@ EntrustRoleTrait='vendor/zizaco/entrust/src/Entrust/Traits/EntrustRoleTrait.php'
 grep "Config::get('auth.providers.users.model')," $EntrustRoleTrait &> /dev/null || sed -i \
 "s/Config::get('auth.model'),/Config::get('auth.providers.users.model'),/g" $EntrustRoleTrait || exit 43
 
+end=$(date "+%s"); time=$((end-start))
 # 结束语
 clear
-echoGreen "+------------------------------------------------+"
-echoGreen "| Install and Configure Quefei Core Successfully |"
-echoGreen "+------------------------------------------------+"
+echoGreen "Install and configure quefei core successfully"
+echoGreen "Time used: $time seconds"
+echo ""
+echoGreen "Default user: admin"
+echoGreen "User password: 123456"
+echoGreen "Site Title: $title"
+echoGreen "Site Logo: $logo"
+echoGreen "Site Copyright: $copyright"
 
