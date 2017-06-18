@@ -90,6 +90,8 @@ grep 'CACHE_DRIVER=array' .env &> /dev/null || (sed -i "/CACHE_DRIVER/d" .env; e
 
 # 安装
 
+composer require predis/predis
+
 for installed in 'quefei/core' \
 				 'tom-lingham/searchy' \
 				 'laravelcollective/html' \
