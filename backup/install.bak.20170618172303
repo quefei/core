@@ -90,15 +90,15 @@ grep 'CACHE_DRIVER=array' .env &> /dev/null || (sed -i "/CACHE_DRIVER/d" .env; e
 
 # 安装
 
-for installed in 'quefei/core' \
-				 'tom-lingham/searchy' \
-				 'laravelcollective/html' \
-				 'zizaco/entrust' \
-				 'quefei/aliyundm' \
-				 'quefei/aliyunmns' \
-				 'quefei/myauth' \
-				 'quefei/myentrust' \
-				 'predis/predis'
+for installed in '"name" *: *"quefei/core"' \
+				 '"name" *: *"tom-lingham/searchy"' \
+				 '"name" *: *"laravelcollective/html"' \
+				 '"name" *: *"zizaco/entrust"' \
+				 '"name" *: *"quefei/aliyundm"' \
+				 '"name" *: *"quefei/aliyunmns"' \
+				 '"name" *: *"quefei/myauth"' \
+				 '"name" *: *"quefei/myentrust"' \
+				 '"name" *: *"predis/predis"'
 do
 	grep $installed vendor/composer/installed.json &> /dev/null || composer require quefei/core$version || exit 21
 done
@@ -284,6 +284,8 @@ else
 fi
 
 # 环境配置
+echo "" >> .env
+
 for aliyun in 'ALIYUN_ACCESS_KEY_ID' \
 			  'ALIYUN_ACCESS_KEY_SECRET' \
 			  'ALIYUN_MNS_ENDPOINT' \
