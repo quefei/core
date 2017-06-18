@@ -90,17 +90,18 @@ grep 'CACHE_DRIVER=array' .env &> /dev/null || (sed -i "/CACHE_DRIVER/d" .env; e
 
 # 安装
 
-for installed in '"name" *: *"quefei/core"' \
-				 '"name" *: *"tom-lingham/searchy"' \
-				 '"name" *: *"laravelcollective/html"' \
-				 '"name" *: *"zizaco/entrust"' \
-				 '"name" *: *"quefei/aliyundm"' \
-				 '"name" *: *"quefei/aliyunmns"' \
-				 '"name" *: *"quefei/myauth"' \
-				 '"name" *: *"quefei/myentrust"' \
-				 '"name" *: *"predis/predis"'
+for installed in 'quefei/core' \
+				 'tom-lingham/searchy' \
+				 'laravelcollective/html' \
+				 'zizaco/entrust' \
+				 'quefei/aliyundm' \
+				 'quefei/aliyunmns' \
+				 'quefei/myauth' \
+				 'quefei/myentrust' \
+				 'predis/predis'
 do
-	grep $installed vendor/composer/installed.json &> /dev/null || composer require quefei/core$version || exit 21
+	grep '"name": "'$installed'"' vendor/composer/installed.json &> /dev/null || composer require quefei/core$version || exit 21
+	ls vendor/$installed/composer.json || composer require $installed || exit 48
 done
 
 # 注册
