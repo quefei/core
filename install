@@ -90,7 +90,11 @@ grep 'CACHE_DRIVER=array' .env &> /dev/null || (sed -i "/CACHE_DRIVER/d" .env; e
 
 # 安装
 
-composer require predis/predis
+# 特殊处理
+for (( i = 0; i < 10; i++ ))
+do
+    [ -f vendor/predis/predis/composer.json ] || composer require predis/predis
+done
 
 for installed in 'quefei/core' \
 				 'tom-lingham/searchy' \
@@ -103,7 +107,7 @@ for installed in 'quefei/core' \
 				 'predis/predis'
 do
 	grep '"name": "'$installed'"' vendor/composer/installed.json &> /dev/null || composer require quefei/core$version || exit 21
-	ls vendor/$installed/composer.json || composer require $installed || exit 48
+	[ -f vendor/$installed/composer.json ] || composer require $installed || exit 48
 done
 
 # 注册
